@@ -3,9 +3,7 @@
 Backend sklepu z ubraniami oparty o FastAPI, MongoDB i Beanie.
 
 Projekt zawiera podstawowa konfiguracje aplikacji, kontener bazy danych,
-proste modele domenowe oraz dokumentacje schematu. Nie zawiera CRUD-ow dla
-domeny, zeby mozna bylo dopisac je samodzielnie w warstwach `routers`,
-`services` i `repositories`.
+proste modele domenowe oraz dokumentacje schematu.
 
 ## Start lokalny
 
