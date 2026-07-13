@@ -19,3 +19,5 @@ class KategoriaRepository:
     async def update(self, kategoria: Kategoria) -> Kategoria:
         return await kategoria.save()
 
+    async def delete(self, kategoria: Kategoria) -> None:
+        await kategoria.delete()

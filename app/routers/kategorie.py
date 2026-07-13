@@ -56,3 +56,10 @@ async def update_kategoria(kategoria_id: PydanticObjectId, data: KategoriaUpdate
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
 
 
+@router.delete("/{kategoria_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_kategoria(kategoria_id: PydanticObjectId) -> None:
+    service = KategoriaService()
+    try:
+        await service.delete(kategoria_id)
+    except KategoriaNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc

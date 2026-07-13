@@ -60,6 +60,12 @@ class KategoriaService:
             czy_aktywna=updated_kategoria.czy_aktywna
         )
     
+    async def delete(self, kategoria_id: str) -> None:
+        kategoria = await self.repository.get_by_id(kategoria_id)
+        if kategoria is None:
+            raise KategoriaNotFoundError("Kategoria nie istnieje.")
+        await self.repository.delete(kategoria)
+
     async def get_by_id(self, kategoria_id: str) -> KategoriaResponse:
         kategoria = await self.repository.get_by_id(kategoria_id)
         if kategoria is None:
