@@ -77,3 +77,18 @@ Na start zostaly tylko podstawowe dokumenty:
 ```powershell
 pytest
 ```
+
+## Przykladowy pion aplikacji
+
+Kategorie maja prosty przyklad przeplywu:
+
+- `app/routers/kategorie.py` obsluguje HTTP
+- `app/services/kategoria_service.py` trzyma reguly biznesowe
+- `app/repositories/kategoria_repository.py` komunikuje sie z Beanie
+- `app/schemas/kategoria.py` opisuje dane wejsciowe API
+
+Przykladowe endpointy:
+
+- `POST /kategorie`
+- `GET /kategorie`
+- `GET /kategorie/{kategoria_id}`
