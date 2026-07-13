@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from beanie import Document, PydanticObjectId
 from pydantic import BaseModel, Field
 from pymongo import ASCENDING, IndexModel
@@ -19,7 +17,7 @@ class Produkt(Document, TimestampMixin):
     slug: str = Field(min_length=2, max_length=180)
     opis: str | None = Field(default=None, max_length=5000)
     kategoria_id: PydanticObjectId
-    cena: Decimal = Field(ge=0, decimal_places=2)
+    cena: float = Field(ge=0)
     waluta: Waluta = Waluta.PLN
     zdjecia: list[str] = Field(default_factory=list)
     warianty: list[WariantProduktu] = Field(default_factory=list)
