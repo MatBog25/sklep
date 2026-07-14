@@ -4,7 +4,7 @@ from fastapi import FastAPI
 
 from app.core.config import settings
 from app.core.database import close_database, init_database
-from app.routers import health, kategorie, produkty
+from app.routers import health, kategorie, produkty, auth
 
 
 @asynccontextmanager
@@ -20,6 +20,8 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+app.include_router(auth.router)
 app.include_router(health.router)
 app.include_router(kategorie.router)
 app.include_router(produkty.router)
+

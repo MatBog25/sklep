@@ -10,6 +10,10 @@ class Settings(BaseSettings):
     mongodb_uri: str = "mongodb://shop_user:shop_password@localhost:27017/clothing_store?authSource=admin"
     mongodb_db_name: str = "clothing_store"
 
+    jwt_secret_key: str = "tajny_klucz" #sprawdzic czy to nie bedzie nadpisane
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 30
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

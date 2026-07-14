@@ -1,6 +1,8 @@
 from beanie import PydanticObjectId
-from fastapi import APIRouter, HTTPException, status
+from fastapi import Depends, APIRouter, HTTPException, status
 
+from app.core.security import get_current_klient
+from app.models.klient import Klient
 from app.schemas.produkt import ProduktCreate, ProduktResponse, ProduktUpdate
 from app.services.produkt_service import (
     ProduktAlreadyExistsError,
@@ -27,7 +29,7 @@ async def get_produkt(produkt_id: PydanticObjectId) -> ProduktResponse:
     
 
 @router.post("", response_model=ProduktResponse, status_code=status.HTTP_201_CREATED)
-async def create_produkt(data: ProduktCreate) -> ProduktResponse:
+async def create_produkt(data: ProduktCreate, current_klient: Klient = Depends(get_current_klient)) -> ProduktResponse:
     service = ProduktService()
     try:
         data = await service.create(data)
@@ -50,7 +52,7 @@ async def create_produkt(data: ProduktCreate) -> ProduktResponse:
 
 
 @router.put("/{produkt_id}", response_model=ProduktResponse)
-async def update_produkt(produkt_id: PydanticObjectId, data: ProduktUpdate) -> ProduktResponse:
+async def update_produkt(produkt_id: PydanticObjectId, data: ProduktUpdate, current_klient: Klient = Depends(get_current_klient)) -> ProduktResponse:
     service = ProduktService()
     try:
         return await service.update(produkt_id, data)
@@ -61,7 +63,7 @@ async def update_produkt(produkt_id: PydanticObjectId, data: ProduktUpdate) -> P
 
 
 @router.delete("/{produkt_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_produkt(produkt_id: PydanticObjectId):
+async def delete_produkt(produkt_id: PydanticObjectId, current_klient: Klient = Depends(get_current_klient)):
     service = ProduktService()
     try:
         await service.delete(produkt_id)
