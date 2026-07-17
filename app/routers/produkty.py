@@ -34,18 +34,7 @@ async def create_produkt(data: ProduktCreate, current_klient: Klient = Depends(g
     try:
         data = await service.create(data)
 
-        return ProduktResponse(
-            id=str(data.id),
-            nazwa=data.nazwa,
-            slug=data.slug,
-            opis=data.opis,
-            kategoria_id=str(data.kategoria_id),
-            cena=data.cena,
-            waluta=data.waluta,
-            zdjecia=data.zdjecia,
-            warianty=data.warianty,
-            czy_aktywny=data.czy_aktywny,
-        )
+        return data
     
     except ProduktAlreadyExistsError as exc:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
@@ -69,6 +58,5 @@ async def delete_produkt(produkt_id: PydanticObjectId, current_klient: Klient = 
     service = ProduktService()
     try:
         await service.delete(produkt_id)
-        return {"message": "Produkt został usunięty."}
     except ProduktNotFoundError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc

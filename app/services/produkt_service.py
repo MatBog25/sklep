@@ -39,7 +39,20 @@ class ProduktService:
             warianty=data.warianty,
             czy_aktywny=data.czy_aktywny,
         )
-        return await self.repository.create(produkt)
+        created_produkt = await self.repository.create(produkt)
+        
+        return ProduktResponse(
+            id=str(created_produkt.id),
+            nazwa=created_produkt.nazwa,
+            slug=created_produkt.slug,
+            opis=created_produkt.opis,
+            kategoria_id=str(created_produkt.kategoria_id),
+            cena=created_produkt.cena,
+            waluta=created_produkt.waluta,
+            zdjecia=created_produkt.zdjecia,
+            warianty=created_produkt.warianty,
+            czy_aktywny=created_produkt.czy_aktywny
+        )
 
     async def update(self, produkt_id: PydanticObjectId, data: ProduktUpdate) -> ProduktResponse:
         produkt = await self.repository.get_by_id(produkt_id)

@@ -34,7 +34,17 @@ class KategoriaService:
             rodzic_id=data.rodzic_id,
             czy_aktywna=data.czy_aktywna,
         )
-        return await self.repository.create(kategoria)
+
+        created_kategoria =await self.repository.create(kategoria)
+
+        return KategoriaResponse(
+            id=str(created_kategoria.id),
+            nazwa=created_kategoria.nazwa,
+            slug=created_kategoria.slug,
+            opis=created_kategoria.opis,
+            rodzic_id=str(created_kategoria.rodzic_id) if created_kategoria.rodzic_id else None,
+            czy_aktywna=created_kategoria.czy_aktywna
+        )
 
     async def update(self, kategoria_id: str, data: KategoriaUpdate) -> KategoriaResponse:
         kategoria = await self.repository.get_by_id(kategoria_id)

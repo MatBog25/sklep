@@ -32,14 +32,7 @@ async def create_kategoria(data: KategoriaCreate) -> KategoriaResponse:
     try:
         data = await service.create(data)
 
-        return KategoriaResponse(
-            id=data.id,
-            nazwa=data.nazwa,
-            slug=data.slug,
-            opis=data.opis,
-            rodzic_id=str(data.rodzic_id) if data.rodzic_id else None,
-            czy_aktywna=data.czy_aktywna
-        )
+        return data
     
     except KategoriaAlreadyExistsError as exc:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
