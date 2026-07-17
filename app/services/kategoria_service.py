@@ -17,7 +17,7 @@ class KategoriaService:
     def __init__(self, repository: KategoriaRepository | None = None) -> None:
         self.repository = repository or KategoriaRepository()
 
-    async def create(self, data: KategoriaCreate) -> Kategoria:
+    async def create(self, data: KategoriaCreate) -> KategoriaResponse:
         existing = await self.repository.get_by_slug(data.slug)
         if existing is not None:
             raise KategoriaAlreadyExistsError("Kategoria z takim slugiem juz istnieje.")

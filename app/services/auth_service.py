@@ -21,7 +21,7 @@ class AuthService:
     def __init__(self, repository: KlientRepository | None = None) -> None:
         self.repository = repository or KlientRepository()
 
-    async def register(self, data: KlientRegister) -> Klient:
+    async def register(self, data: KlientRegister) -> KlientMeResponse:
         existing = await self.repository.get_by_email(data.email)
         if existing is not None:
             raise KlientAlreadyExistsError("Klient z takim emailem juz istnieje.")
@@ -34,9 +34,19 @@ class AuthService:
             imie=data.imie,
             nazwisko=data.nazwisko,
             telefon=data.telefon,
-            czy_aktywny=data.czy_aktywny,
+            czy_aktywny=True,
+            rola="klient",
         )
-        return await self.repository.create(klient)
+        
+        created_klient = await self.repository.create(klient)
+
+        return KlientMeResponse(
+            id=str(created_klient.id),
+            email=created_klient.email,
+            imie=created_klient.imie,
+            nazwisko=created_klient.nazwisko,
+            rola=created_klient.rola,
+        )
 
     async def login(self, data: KlientLogin) -> TokenResponse:
         klient = await self.repository.get_by_email(data.email)
@@ -60,6 +70,7 @@ class AuthService:
             email=klient.email,
             imie=klient.imie,
             nazwisko=klient.nazwisko,
+            rola=klient.rola,
         )
     
     def hash_password(self, password: str) -> str:

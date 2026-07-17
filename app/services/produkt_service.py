@@ -19,7 +19,7 @@ class ProduktService:
         self.repository = repository or ProduktRepository()
         self.category_repository = category_repository or KategoriaRepository()
 
-    async def create(self, data: ProduktCreate) -> Produkt:
+    async def create(self, data: ProduktCreate) -> ProduktResponse:
         existing = await self.repository.get_by_slug(data.slug)
         if existing is not None:
             raise ProduktAlreadyExistsError("Produkt z takim slugiem juz istnieje.")
@@ -40,7 +40,7 @@ class ProduktService:
             czy_aktywny=data.czy_aktywny,
         )
         created_produkt = await self.repository.create(produkt)
-        
+
         return ProduktResponse(
             id=str(created_produkt.id),
             nazwa=created_produkt.nazwa,

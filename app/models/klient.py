@@ -1,6 +1,7 @@
 from beanie import Document
 from pydantic import EmailStr, Field
 from pymongo import ASCENDING, IndexModel
+from typing import Literal
 
 from app.models.common import TimestampMixin
 
@@ -11,6 +12,7 @@ class Klient(Document, TimestampMixin):
     imie: str = Field(min_length=1, max_length=80)
     nazwisko: str = Field(min_length=1, max_length=120)
     telefon: str | None = Field(default=None, max_length=40)
+    rola: Literal["klient", "admin"] = "klient"
     czy_aktywny: bool = True
 
     class Settings:

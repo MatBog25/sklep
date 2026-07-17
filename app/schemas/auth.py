@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field, EmailStr
+from typing import Literal
 
 class KlientLogin(BaseModel):
     email: EmailStr
@@ -9,7 +10,6 @@ class KlientRegister(KlientLogin):
     imie: str = Field(..., min_length=2, max_length=100)
     nazwisko: str = Field(..., min_length=2, max_length=100)
     telefon: str | None = Field(default=None, max_length=20)
-    czy_aktywny: bool = True
 
 
 class TokenResponse(BaseModel):
@@ -22,3 +22,4 @@ class KlientMeResponse(BaseModel):
     email: EmailStr
     imie: str
     nazwisko: str
+    rola: Literal["klient", "admin"] = "klient"
