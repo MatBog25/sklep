@@ -1,15 +1,9 @@
 from beanie import Document, PydanticObjectId
-from pydantic import BaseModel, Field
+from pydantic import Field
 from pymongo import ASCENDING, IndexModel
 
 from app.models.common import TimestampMixin, Waluta
-
-
-class WariantProduktu(BaseModel):
-    sku: str = Field(min_length=2, max_length=80)
-    rozmiar: str = Field(min_length=1, max_length=20)
-    kolor: str = Field(min_length=2, max_length=60)
-    stan_magazynowy: int = Field(default=0, ge=0)
+from app.schemas.produkt import WariantProduktu
 
 
 class Produkt(Document, TimestampMixin):
