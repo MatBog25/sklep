@@ -2,6 +2,7 @@ from beanie import PydanticObjectId
 
 from app.models.produkt import Produkt
 from app.repositories.produkt_repository import ProduktRepository
+from app.repositories.kategoria_repository import KategoriaRepository
 from app.schemas.produkt import ProduktResponse, ProduktCreate, ProduktUpdate
 
 
@@ -14,13 +15,18 @@ class ProduktNotFoundError(Exception):
 
 
 class ProduktService:
-    def __init__(self, repository: ProduktRepository | None = None) -> None:
+    def __init__(self, repository: ProduktRepository | None = None, category_repository: KategoriaRepository | None = None) -> None:
         self.repository = repository or ProduktRepository()
+        self.category_repository = category_repository or KategoriaRepository()
 
     async def create(self, data: ProduktCreate) -> Produkt:
         existing = await self.repository.get_by_slug(data.slug)
         if existing is not None:
             raise ProduktAlreadyExistsError("Produkt z takim slugiem juz istnieje.")
+
+        existing_category = await self.category_repository.get_by_id(data.kategoria_id)
+        if existing_category is None:
+            raise ValueError("Kategoria nie istnieje.")
 
         produkt = Produkt(
             nazwa=data.nazwa,
@@ -53,6 +59,9 @@ class ProduktService:
         if data.opis is not None:
             produkt.opis = data.opis
         if data.kategoria_id is not None:
+            existing_category = await self.category_repository.get_by_id(data.kategoria_id)
+            if existing_category is None:
+                raise ValueError("Kategoria nie istnieje.")
             produkt.kategoria_id = data.kategoria_id
         if data.cena is not None:
             produkt.cena = data.cena

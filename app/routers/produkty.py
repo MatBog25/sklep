@@ -49,7 +49,8 @@ async def create_produkt(data: ProduktCreate, current_klient: Klient = Depends(g
     
     except ProduktAlreadyExistsError as exc:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
-
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
 @router.put("/{produkt_id}", response_model=ProduktResponse)
 async def update_produkt(produkt_id: PydanticObjectId, data: ProduktUpdate, current_klient: Klient = Depends(get_current_klient)) -> ProduktResponse:
@@ -60,7 +61,8 @@ async def update_produkt(produkt_id: PydanticObjectId, data: ProduktUpdate, curr
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
     except ProduktNotFoundError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
-
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
 @router.delete("/{produkt_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_produkt(produkt_id: PydanticObjectId, current_klient: Klient = Depends(get_current_klient)):
