@@ -12,5 +12,6 @@ __all__ = [
     "Kategoria",
     "Klient",
     "Produkt",
+    "Koszyk"
     "document_models",
 ]
