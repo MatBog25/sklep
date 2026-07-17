@@ -22,6 +22,11 @@ class KategoriaService:
         if existing is not None:
             raise KategoriaAlreadyExistsError("Kategoria z takim slugiem juz istnieje.")
 
+        existing_parent_id = await self.repository.get_by_id(data.rodzic_id) if data.rodzic_id else None
+
+        if existing_parent_id is None and data.rodzic_id is not None:
+            raise ValueError("Rodzic nie istnieje.")
+        
         kategoria = Kategoria(
             nazwa=data.nazwa,
             slug=data.slug,
@@ -46,6 +51,12 @@ class KategoriaService:
         if data.opis is not None:
             kategoria.opis = data.opis
         if data.rodzic_id is not None:
+            if data.rodzic_id == kategoria.id:
+                raise ValueError("Kategoria nie moze byc swoim wlasnym rodzicem.")
+            if data.rodzic_id is not None:
+                rodzic = await self.repository.get_by_id(data.rodzic_id)
+                if rodzic is None:
+                    raise ValueError("Rodzic nie istnieje.")
             kategoria.rodzic_id = data.rodzic_id
         if data.czy_aktywna is not None:
             kategoria.czy_aktywna = data.czy_aktywna
